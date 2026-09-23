@@ -1,0 +1,421 @@
+* { box-sizing: border-box; }
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #14202c;
+  background: #eaf4f7;
+}
+
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(67, 207, 201, .20), transparent 28%),
+    radial-gradient(circle at 90% 20%, rgba(129, 100, 220, .12), transparent 25%),
+    #eaf4f7;
+}
+
+.game-shell {
+  width: min(520px, 100%);
+  min-height: calc(100vh - 48px);
+  overflow: hidden;
+  border: 1px solid rgba(20, 32, 44, .08);
+  border-radius: 32px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 24px 70px rgba(20, 50, 70, .15);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 26px 12px;
+}
+
+.eyebrow { font-size: 11px; font-weight: 900; letter-spacing: .18em; color: #15aaa7; }
+h1 { margin: 2px 0 0; font-size: 29px; line-height: 1; }
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff0f1;
+  color: #e0525c;
+  font-size: 11px;
+  font-weight: 900;
+}
+.live-badge span { width: 7px; height: 7px; border-radius: 50%; background: #ef5360; box-shadow: 0 0 0 4px rgba(239,83,96,.12); }
+
+.pet-area {
+  position: relative;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #effbfc, #dff4f2);
+}
+
+.stage-label {
+  position: absolute;
+  top: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #4f6974;
+}
+
+.pet-glow {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: rgba(53, 207, 198, .20);
+  filter: blur(20px);
+}
+
+.pet { position: relative; width: 180px; height: 205px; margin-top: 24px; }
+
+/* Comportamiento corporal de Nubi según el evento social */
+.pet.social-play,
+.pet.social-affection,
+.pet.social-mischief,
+.pet.social-attention {
+  will-change: transform;
+}
+
+.pet.social-play {
+  animation: nubiSocialPlay 1.1s ease-in-out infinite;
+}
+
+.pet.social-affection {
+  animation: nubiSocialAffection 1.8s ease-in-out infinite;
+}
+
+.pet.social-mischief {
+  animation: nubiSocialMischief .8s ease-in-out infinite;
+}
+
+.pet.social-attention {
+  animation: nubiSocialAttention 1.2s ease-in-out infinite;
+}
+
+@keyframes nubiSocialPlay {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-9px) rotate(-3deg); }
+  60% { transform: translateY(2px) rotate(3deg); }
+}
+
+@keyframes nubiSocialAffection {
+  0%, 100% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(5px) scale(1.025); }
+}
+
+@keyframes nubiSocialMischief {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-6px) rotate(-4deg); }
+  50% { transform: translateX(7px) rotate(4deg); }
+  75% { transform: translateX(-4px) rotate(-2deg); }
+}
+
+@keyframes nubiSocialAttention {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-4px); }
+  70% { transform: translateY(1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet.social-play,
+  .pet.social-affection,
+  .pet.social-mischief,
+  .pet.social-attention {
+    animation: none;
+  }
+}
+
+.social-event {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+  padding: 8px 13px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 7px 20px rgba(30,70,80,.12);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  animation: socialEventAppear .25s ease-out;
+}
+
+@keyframes socialEventAppear {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.body {
+  position: absolute;
+  left: 15px;
+  bottom: 0;
+  width: 150px;
+  height: 175px;
+  border-radius: 48% 48% 43% 43%;
+  background: linear-gradient(145deg, #52d9d0, #14aaa7);
+  border: 5px solid #087f87;
+  box-shadow: inset -13px -16px 0 rgba(0,0,0,.07), 0 16px 28px rgba(10, 100, 110, .18);
+}
+
+.ear {
+  position: absolute;
+  top: 3px;
+  width: 42px;
+  height: 72px;
+  border-radius: 50% 50% 30% 30%;
+  background: #25b9ba;
+  border: 5px solid #087f87;
+  z-index: 0;
+}
+.ear:after { content: ""; position: absolute; inset: 9px; border-radius: inherit; background: #9a71c7; }
+.ear.left { left: 22px; transform: rotate(-18deg); }
+.ear.right { right: 22px; transform: rotate(18deg); }
+
+.eye { position: absolute; top: 64px; width: 20px; height: 26px; border-radius: 50%; background: #172b39; }
+.eye:after { content: ""; position: absolute; width: 7px; height: 9px; left: 4px; top: 3px; border-radius: 50%; background: white; }
+.left-eye { left: 37px; }
+.right-eye { right: 37px; }
+
+.mouth { position: absolute; top: 95px; left: 65px; font-size: 38px; line-height: 25px; font-weight: 900; color: #172b39; }
+.cheek { position: absolute; top: 101px; width: 18px; height: 9px; border-radius: 50%; background: rgba(239, 93, 119, .55); }
+.left-cheek { left: 20px; }
+.right-cheek { right: 20px; }
+
+/* Expresión de Nubi según su interacción social */
+
+/* Juguetona: ojos atentos y sonrisa más marcada */
+.pet.social-play .eye {
+  height: 23px;
+  transform: scaleY(1.08);
+}
+
+.pet.social-play .mouth {
+  transform: scale(1.12);
+}
+
+.pet.social-play .cheek {
+  transform: scale(1.12);
+}
+
+/* Cariñosa: expresión suave */
+.pet.social-affection .eye {
+  height: 18px;
+  transform: scaleY(.72);
+  top: 68px;
+}
+
+.pet.social-affection .mouth {
+  transform: scale(.92);
+}
+
+.pet.social-affection .cheek {
+  transform: scale(1.3);
+}
+
+/* Traviesa: mirada ligeramente ladeada */
+.pet.social-mischief .left-eye {
+  transform: rotate(8deg) scaleY(.9);
+}
+
+.pet.social-mischief .right-eye {
+  transform: rotate(-8deg) scaleY(.9);
+}
+
+.pet.social-mischief .mouth {
+  transform: rotate(-4deg) scale(1.05);
+}
+
+/* Atención: ojos más abiertos */
+.pet.social-attention .eye {
+  width: 22px;
+  height: 29px;
+  top: 62px;
+}
+
+.pet.social-attention .eye:after {
+  width: 8px;
+  height: 10px;
+}
+
+/* Las orejas acompañan el estado social */
+.pet.social-play .ear.left {
+  animation: nubiEarPlayLeft .7s ease-in-out infinite;
+}
+
+.pet.social-play .ear.right {
+  animation: nubiEarPlayRight .7s ease-in-out infinite;
+}
+
+.pet.social-affection .ear.left {
+  transform: rotate(-24deg);
+}
+
+.pet.social-affection .ear.right {
+  transform: rotate(24deg);
+}
+
+.pet.social-mischief .ear.left {
+  transform: rotate(-11deg);
+}
+
+.pet.social-mischief .ear.right {
+  transform: rotate(11deg);
+}
+
+@keyframes nubiEarPlayLeft {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(-27deg); }
+}
+
+@keyframes nubiEarPlayRight {
+  0%, 100% { transform: rotate(18deg); }
+  50% { transform: rotate(27deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet.social-play .ear.left,
+  .pet.social-play .ear.right {
+    animation: none;
+  }
+}
+
+.pet-message {
+  position: relative;
+  margin-top: 10px;
+  padding: 9px 15px;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(30,70,80,.12);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 18px 22px 8px; }
+.stat { padding: 11px 12px; border-radius: 15px; background: #f6fafb; }
+.stat-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 750; }
+.stat-top strong { font-size: 11px; }
+.stat-track, .progress-track { height: 6px; margin-top: 7px; overflow: hidden; border-radius: 99px; background: #dfe9eb; }
+.stat-fill { height: 100%; border-radius: inherit; background: #35c9c0; transition: width .35s ease; }
+
+.evolution { padding: 14px 22px 18px; }
+.section-heading { display: flex; justify-content: space-between; font-size: 12px; font-weight: 850; }
+.progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #35c9c0, #8e71cf); transition: width .35s ease; }
+.evolve-button { width: 100%; margin-top: 10px; border: 0; border-radius: 13px; padding: 11px; background: #172b39; color: white; font-size: 11px; font-weight: 900; cursor: pointer; }
+.evolve-button:disabled { opacity: .35; cursor: default; }
+
+.live-panel { margin: 0 18px 18px; padding: 16px; border-radius: 22px; background: #f0f6f7; }
+.panel-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.panel-title span { font-size: 10px; font-weight: 950; letter-spacing: .12em; }
+.panel-title small { color: #66808a; font-size: 9px; }
+.event-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.event-button { min-height: 64px; border: 1px solid #dce8ea; border-radius: 13px; background: white; color: #263944; font-size: 9px; font-weight: 800; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+.event-button:hover { transform: translateY(-2px); box-shadow: 0 7px 16px rgba(20,50,60,.10); }
+.event-button:active { transform: scale(.96); }
+.event-button span { display: block; margin-bottom: 4px; font-size: 22px; }
+.event-button.special { background: #fff8e5; border-color: #f1d47a; }
+
+footer { display: flex; justify-content: space-between; padding: 0 24px 22px; color: #78909a; font-size: 9px; font-weight: 750; }
+
+@media (max-width: 430px) {
+  .app { padding: 0; }
+  .game-shell { min-height: 100vh; border-radius: 0; }
+}
+
+
+.chat-panel {
+  margin: 0 18px 18px;
+  padding: 16px;
+  border-radius: 22px;
+  background: #172b39;
+  color: white;
+}
+
+.chat-panel .panel-title span {
+  color: white;
+}
+
+.chat-panel .panel-title small {
+  color: #9db2bb;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 7px;
+}
+
+.chat-input-row input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  padding: 12px;
+  outline: none;
+  background: rgba(255,255,255,.08);
+  color: white;
+  font-size: 12px;
+}
+
+.chat-input-row input::placeholder {
+  color: #8ca1aa;
+}
+
+.chat-input-row input:focus {
+  border-color: #35c9c0;
+}
+
+.chat-input-row button {
+  border: 0;
+  border-radius: 12px;
+  padding: 0 13px;
+  background: #35c9c0;
+  color: #102c35;
+  font-size: 10px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.chat-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.chat-examples button {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: rgba(255,255,255,.06);
+  color: #dce9ed;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.chat-examples button:active {
+  transform: scale(.96);
+}
