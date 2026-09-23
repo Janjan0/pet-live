@@ -138,6 +138,13 @@ function getViewerIdentity(viewer: string) {
   };
 }
 
+type NubiCommentContext = {
+  text: string;
+  viewerId: string;
+  username: string;
+  displayName: string;
+};
+
 function App() {
   const [world, setWorld] =
     useState<NubiWorld>(() => {
@@ -886,8 +893,25 @@ function App() {
     });
   }
 
-  async function sendComment() {
-    const text = comment.trim();
+  async function sendComment(
+    context?: NubiCommentContext,
+  ) {
+    const text =
+      context?.text.trim() ??
+      comment.trim();
+
+    const commentViewer =
+      context?.displayName ??
+      viewer;
+
+    const commentViewerIdentity =
+      context
+        ? {
+            viewerId: context.viewerId,
+            username: context.username,
+            displayName: context.displayName,
+          }
+        : viewerIdentity;
 
     if (!text || thinking) return;
 
