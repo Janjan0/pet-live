@@ -432,6 +432,7 @@ const constructionActions: Array<{
       "morderte",
       "dar un mordisco",
       "darte un mordisquito",
+      "hacer cosquillas",
       "hacerte cosquillas",
     ],
     action: "tease",
@@ -509,8 +510,52 @@ function interpretConstruction(
     };
   }
 
-  const remainder =
-    construction[1].trim();
+  let remainder =
+    construction[1]
+      .trim()
+      .replace(/^[,;:!?¿¡.]+|[,;:!?¿¡.]+$/gu, "")
+      .trim();
+
+  /*
+   * "Nubi" puede aparecer como vocativo al final:
+   *
+   * "te quiero Nubi"
+   * "te quiero, Nubi"
+   * "te quiero morder Nubi"
+   * "te quiero morder, Nubi"
+   *
+   * No forma parte de la acción. Lo retiramos antes
+   * de buscar la acción conocida.
+   */
+  remainder =
+    remainder
+      .replace(
+        /(?:\s+|[,;:!?¿¡.]+\s*)nubi$/iu,
+        "",
+      )
+      .trim();
+
+  /*
+   * "Nubi" puede ser el destinatario de "te quiero":
+   *
+   * "te quiero Nubi"
+   * "te quiero, Nubi"
+   *
+   * En ambos casos "Nubi" es un vocativo,
+   * no una acción ni un término desconocido.
+   */
+  if (
+    !remainder ||
+    /^nubi$/iu.test(remainder)
+  ) {
+    return {
+      action: "pet",
+      confidence: 1,
+      response: "Nubi siente todo ese amor 🥹❤️",
+      sentiment: "positive",
+      addressedToNubi: true,
+    };
+  }
 
   const known =
     matchConstructionAction(remainder);
