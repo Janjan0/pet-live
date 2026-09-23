@@ -1055,7 +1055,7 @@ function App() {
 
           const nextViewers =
             currentViewers.map((profile) =>
-              profile.viewerId === viewerIdentity.viewerId
+              profile.viewerId === commentViewerIdentity.viewerId
                 ? {
                     ...profile,
                     lastSeen: absenceStart,
@@ -1077,7 +1077,7 @@ function App() {
         );
 
         setLastEvent(
-          `🧪 Debug regreso preparado para @${viewerIdentity.viewerId}`,
+          `🧪 Debug regreso preparado para @${commentViewerIdentity.viewerId}`,
         );
 
         setMood("curious");
@@ -1143,7 +1143,7 @@ function App() {
       await resolveAndLearnKnowledge(
         knowledgeBase,
         text,
-        viewer,
+        commentViewer,
       );
 
     /*
@@ -1305,7 +1305,7 @@ function App() {
       const previousViewer =
         previousViewers.find(
           (profile) =>
-            profile.viewerId === viewerIdentity.viewerId,
+            profile.viewerId === commentViewerIdentity.viewerId,
         );
 
       const now = Date.now();
@@ -1328,14 +1328,14 @@ function App() {
       const pendingReturnGreeting =
         wasAbsent
           ? getPendingReturnGreetings(
-              viewerIdentity.viewerId,
+              commentViewerIdentity.viewerId,
             )[0] ?? null
           : null;
 
       const purchasedReturnGreeting =
         pendingReturnGreeting && wasAbsent
           ? consumeReturnGreeting(
-              viewerIdentity.viewerId,
+              commentViewerIdentity.viewerId,
               now,
             )
           : null;
@@ -1386,11 +1386,11 @@ function App() {
         } else if (previousViewer) {
           socialResponse =
             previousViewer.bond >= 60
-              ? `🥰 ¡${viewer}! Qué bueno verte otra vez.`
-              : `🐾 ¡${viewer}! Nubi te reconoce.`;
+              ? `🥰 ¡${commentViewer}! Qué bueno verte otra vez.`
+              : `🐾 ¡${commentViewer}! Nubi te reconoce.`;
         } else {
           socialResponse =
-            `🐾 ¡Hola, ${viewer}! Nubi te está conociendo.`;
+            `🐾 ¡Hola, ${commentViewer}! Nubi te está conociendo.`;
         }
       } else if (
         socialIntent === "missing_me"
@@ -1398,40 +1398,40 @@ function App() {
         if (wasAbsent) {
           if (previousViewer.bond >= 80) {
             socialResponse =
-              `🥹 Claro que sí, ${viewer}. Nubi notó que te fuiste.`;
+              `🥹 Claro que sí, ${commentViewer}. Nubi notó que te fuiste.`;
           } else if (
             previousViewer.bond >= 60
           ) {
             socialResponse =
-              `💕 Sí, ${viewer}. Nubi notó tu ausencia.`;
+              `💕 Sí, ${commentViewer}. Nubi notó tu ausencia.`;
           } else if (
             previousViewer.bond >= 35
           ) {
             socialResponse =
-              `🐾 Nubi sí notó que no estabas, ${viewer}.`;
+              `🐾 Nubi sí notó que no estabas, ${commentViewer}.`;
           } else {
             socialResponse =
-              `👀 Nubi notó que estuviste un rato fuera, ${viewer}.`;
+              `👀 Nubi notó que estuviste un rato fuera, ${commentViewer}.`;
           }
         } else if (previousViewer) {
           socialResponse =
             `🥰 Si acabas de estar aquí, Nubi no tuvo tiempo de extrañarte.`;
         } else {
           socialResponse =
-            `🐾 Nubi todavía está conociéndote, ${viewer}.`;
+            `🐾 Nubi todavía está conociéndote, ${commentViewer}.`;
         }
       } else if (
         socialIntent === "noticed_absence"
       ) {
         if (wasAbsent) {
           socialResponse =
-            `👀 Sí, ${viewer}. Nubi notó que te fuiste.`;
+            `👀 Sí, ${commentViewer}. Nubi notó que te fuiste.`;
         } else if (previousViewer) {
           socialResponse =
-            `🐾 Nubi te tenía aquí hace poquito, ${viewer}.`;
+            `🐾 Nubi te tenía aquí hace poquito, ${commentViewer}.`;
         } else {
           socialResponse =
-            `🐾 Nubi todavía está aprendiendo quién eres, ${viewer}.`;
+            `🐾 Nubi todavía está aprendiendo quién eres, ${commentViewer}.`;
         }
       }
 
@@ -1447,11 +1447,11 @@ function App() {
       setLastEvent(
         socialIntent === "returned"
           ? wasAbsent
-            ? `🥹 ${viewer} regresó`
-            : `🐾 ${viewer} anunció que está de vuelta`
+            ? `🥹 ${commentViewer} regresó`
+            : `🐾 ${commentViewer} anunció que está de vuelta`
           : socialIntent === "missing_me"
-            ? `💕 ${viewer} preguntó si Nubi lo extrañó`
-            : `👀 ${viewer} preguntó si Nubi notó su ausencia`,
+            ? `💕 ${commentViewer} preguntó si Nubi lo extrañó`
+            : `👀 ${commentViewer} preguntó si Nubi notó su ausencia`,
       );
 
       /*
@@ -1617,7 +1617,7 @@ function App() {
               knowledgeBase,
               unknownTerm,
               text,
-              viewer,
+              commentViewer,
             );
 
           /*
@@ -1653,7 +1653,7 @@ function App() {
                 unknownTerm,
                 learningResult.knowledge.meaning,
                 suggestedAction,
-                viewer,
+                commentViewer,
                 webResult?.confidence ??
                   learningResult.knowledge.confidence,
               );
@@ -1737,7 +1737,7 @@ function App() {
                   unknownTerm,
                   learningResult.knowledge.meaning,
                   suggestedAction,
-                  viewer,
+                  commentViewer,
                   webResult?.confidence ??
                     learningResult.knowledge.confidence,
                 );
@@ -1806,7 +1806,7 @@ function App() {
               rememberPendingSemanticMemory(
                 semanticMemories,
                 unknownTerm,
-                viewer,
+                commentViewer,
               );
 
             setSemanticMemories(
@@ -1861,7 +1861,7 @@ function App() {
             rememberPendingSemanticMemory(
               semanticMemories,
               unknownTerm,
-              viewer,
+              commentViewer,
             );
 
           setSemanticMemories(
@@ -1898,7 +1898,7 @@ function App() {
           petId: pet.id,
           petName: pet.name,
           comment: text,
-          user: viewer,
+          user: commentViewer,
           hunger: pet.hunger,
           thirst: pet.thirst,
           energy: pet.energy,
@@ -1968,7 +1968,7 @@ function App() {
       const previousViewer =
         previousViewers.find(
           (profile) =>
-            profile.viewerId === viewerIdentity.viewerId,
+            profile.viewerId === commentViewerIdentity.viewerId,
         );
 
       const returnedFromAbsence =
@@ -2033,19 +2033,19 @@ function App() {
         `🧪 Regreso: ${returnedFromAbsence ? "SÍ" : "NO"} · ` +
         `Perfil: ${previousViewer ? "SÍ" : "NO"} · ` +
         `Ausencia: ${previousViewer ? Math.round((now - previousViewer.lastSeen) / 60000) : 0} min · ` +
-        `viewerId: ${viewerIdentity.viewerId}`;
+        `viewerId: ${commentViewerIdentity.viewerId}`;
 
       const result = processComment(
         current,
         interpretation,
-        viewer,
+        commentViewer,
       );
 
       if (result.accepted) {
         const purchasedReturnGreeting =
           hasPendingReturnGreeting
             ? consumeReturnGreeting(
-                viewerIdentity.viewerId,
+                commentViewerIdentity.viewerId,
                 now,
               )
             : null;
@@ -2069,7 +2069,7 @@ function App() {
 
         if (returnedFromAbsence) {
           setLastEvent(
-            `${debugReturnInfo} · 🥹 ${viewer} volvió al LIVE`,
+            `${debugReturnInfo} · 🥹 ${commentViewer} volvió al LIVE`,
           );
         } else {
           setLastEvent(debugReturnInfo);
@@ -2082,7 +2082,7 @@ function App() {
           const viewerResult =
             registerViewerInteraction(
               currentViewers,
-              viewerIdentity,
+              commentViewerIdentity,
               activePetId,
               result.action,
             );
@@ -2099,7 +2099,7 @@ function App() {
            */
           const episode = buildEpisode({
             action: result.action,
-            user: viewer,
+            user: commentViewer,
             response: result.response,
             autonomous: false,
             viewerProfile:
@@ -2172,7 +2172,7 @@ function App() {
           const nextCommunity =
             addCommunityInteraction(
               currentCommunity,
-              viewer,
+              commentViewer,
               affection,
               care,
               play,
