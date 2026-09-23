@@ -508,6 +508,32 @@ function App() {
       },
     );
 
+    source.addEventListener(
+      "comment",
+      (event) => {
+        try {
+          const data =
+            JSON.parse(event.data);
+
+          void sendComment({
+            text: data.text ?? data.comment ?? "",
+            viewerId: data.viewerId ?? "espectador",
+            username: data.username ?? data.user ?? "Espectador",
+            displayName:
+              data.displayName ??
+              data.username ??
+              data.user ??
+              "Espectador",
+          });
+        } catch (error) {
+          console.error(
+            "❌ Error leyendo comment:",
+            error,
+          );
+        }
+      },
+    );
+
     source.onerror = () => {
       console.warn(
         "⚠️ Conexión con LIVE EVENT BUS perdida. " +
